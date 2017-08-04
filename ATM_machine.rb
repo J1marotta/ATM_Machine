@@ -9,6 +9,7 @@ James Marotta
  -Display Balance
  -Withdraw
  -Deposit
+bonus feature Pin code
 =end
 
 def intro
@@ -61,6 +62,8 @@ the Intro code will keep running while runner is equal to 1.
       change_pin
     when "h"
       send_help
+    when "q"
+      quit
     else
       puts
       puts "1 for Display Balance"
@@ -68,9 +71,56 @@ the Intro code will keep running while runner is equal to 1.
       puts "3 for Withdrawl"
       puts "4 to change PIN"
       puts "h for Help"
+      puts "q to quit"
       puts
     end
   end
+end
+
+def change_pin(pin)
+  chances = 0
+  puts "Change Pin"
+  puts
+  puts "old PIN"
+  old_p = gets.chomp.to_i
+  if old_p != pin
+    puts  "Incorrect Pin"
+    chance += 1
+
+end
+
+
+def send_help
+  puts "1 for Display Balance"
+  puts "2 for Deposit"
+  puts "3 for Withdrawl"
+  puts "4 to change PIN"
+  puts "h for Help"
+  puts "q to quit"
+end
+
+def quit
+ puts
+ puts "You can't quit yet we are buying stuff with your card in India"
+ puts
+ puts "hahaha, joking... "
+ puts " ... "
+ puts "Really Quit? [y/n]"
+ quit = gets.chomp.downcase
+ case quit
+ when "y"
+   puts
+   puts "thanks for choosing ATM Machine 10000"
+   puts
+   runner = 2
+   exit
+ when "n"
+   puts
+   puts "Great choice, we are just hacking your facebook now"
+   puts
+ else
+   puts
+   puts "Really quit? [y/n]"
 end
 
 intro
