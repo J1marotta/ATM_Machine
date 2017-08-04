@@ -15,6 +15,7 @@ bonus feature Pin code
 def intro
 
   # greet the customer
+  system("clear")
   puts
   puts
   puts "Welcome to ATM MACHINE 10000"
@@ -24,24 +25,24 @@ def intro
   puts "I see you are a new bank customer"
   puts "Please enter your details"
   puts "Name"
-  cName =gets.chomp
-  puts "Hi #{cName} Welcome, now lets set up a pin"
-  puts "Please enter a four digit pin"
-  pin = gets.chomp
-  puts
-  puts "Okay Great"
-  puts
-  puts "1 for Display Balance"
-  puts "2 for Deposit"
-  puts "3 for Withdrawl"
-  puts "4 to change PIN"
-  puts "h for Help"
-  puts
 
-  choice(pin)
+  # save their name
+  cName =gets.chomp.capitalize
+  puts "Hi #{cName} Welcome, now lets set up a pin"
+
+  # save their pin number
+  @pinMaster = pin_control
+
+
+  puts @pinMaster
+  puts "Okay Great"
+  sleep(1)
+  send_help
+# run the choice function
+choice
 end
 
-def choice(pin)
+def choice
 =begin
 While loop to continuously ask the user for a choice.
 the Intro code will keep running while runner is equal to 1.
@@ -60,52 +61,63 @@ the Intro code will keep running while runner is equal to 1.
       withdrawal
     when "4"
       change_pin
-    when "h"
-      send_help
     when "q"
       quit
     else
-      puts
-      puts "1 for Display Balance"
-      puts "2 for Deposit"
-      puts "3 for Withdrawl"
-      puts "4 to change PIN"
-      puts "h for Help"
-      puts "q to quit"
-      puts
+      send_help
     end
   end
 end
 
-def change_pin(pin)
+def change_pin
+  puts @pinMaster
+  system("clear")
   chances = 0
-  puts "Change Pin"
-  puts
-  puts "old PIN"
-  old_p = gets.chomp.to_i
-  if old_p != pin
-    puts  "Incorrect Pin"
-    chance += 1
-
+  while chances < 3
+    puts "Change Pin"
+    puts
+    puts "Old PIN"
+    old_p = gets.chomp
+    if old_p != @pinMaster
+      puts  "Incorrect Pin"
+      chances += 1
+    else
+      puts @pinMaster
+      # new_p = 0
+      puts "Enter your New pin"
+      @pinMaster = pin_control
+      puts "PIN CHANGED"
+      chances = 0
+      sleep(1)
+      send_help
+    break
+    end
+  end
+    puts "Three strikes, you're Out"
+    puts
+    police
 end
 
 
 def send_help
-  puts "1 for Display Balance"
-  puts "2 for Deposit"
-  puts "3 for Withdrawl"
-  puts "4 to change PIN"
-  puts "h for Help"
-  puts "q to quit"
+  system("clear")
+  puts "1    for DISPLAY BALANCE"
+  puts "2    for DEPOSIT"
+  puts "3    for WITHDRAWAL"
+  puts "4    to CHANGE PIN"
+  puts "h    for HELP"
+  puts "q    to QUIT"
+  puts
 end
 
 def quit
+  system("clear")
  puts
  puts "You can't quit yet we are buying stuff with your card in India"
- puts
  puts "hahaha, joking... "
  puts " ... "
  puts "Really Quit? [y/n]"
+ puts
  quit = gets.chomp.downcase
  case quit
  when "y"
@@ -118,9 +130,23 @@ def quit
    puts
    puts "Great choice, we are just hacking your facebook now"
    puts
+   help
  else
    puts
    puts "Really quit? [y/n]"
+ end
 end
+
+def pin_control
+  begin
+    # @pin = pin
+    puts "Please enter a four digit pin"
+    newPin = gets.chomp
+  end while newPin.length != 4
+  return newPin
+  # @pinMaster = pin
+end
+
+
 
 intro
