@@ -20,13 +20,27 @@ def intro
   puts "We are here to make your life amazing"
   puts "And definitely not steal your identity"
   puts
-  puts "1 to Withdraw"
-  puts "2 to Check Balance"
-  puts "3 to Make a Deposit"
+  puts "I see you are a new bank customer"
+  puts "Please enter your details"
+  puts "Name"
+  cName =gets.chomp
+  puts "Hi #{cName} Welcome, now lets set up a pin"
+  puts "Please enter a four digit pin"
+  pin = gets.chomp
+  puts
+  puts "Okay Great"
+  puts
+  puts "1 for Display Balance"
+  puts "2 for Deposit"
+  puts "3 for Withdrawl"
+  puts "4 to change PIN"
+  puts "h for Help"
+  puts
 
+  choice(pin)
+end
 
-# defines my 
-  list = []
+def choice(pin)
 =begin
 While loop to continuously ask the user for a choice.
 the Intro code will keep running while runner is equal to 1.
@@ -37,20 +51,26 @@ the Intro code will keep running while runner is equal to 1.
 
  # run different methods depending on choice.
     case choice
-    when "start"
-      add_program(list)
-    when "print"
-      print_program(list)
-    when "finish"
-      finish_program(list)
-      #print with a nice message and set exit code
-      runner == 2
-    when "help"
+    when "1"
+      balance
+    when "2"
+      deposit
+    when "3"
+      withdrawal
+    when "4"
+      change_pin
+    when "h"
       send_help
-    when "remove"
-      remove_item(list)
     else
-      puts "start, print, finish, or help for help"
+      puts
+      puts "1 for Display Balance"
+      puts "2 for Deposit"
+      puts "3 for Withdrawl"
+      puts "4 to change PIN"
+      puts "h for Help"
+      puts
     end
   end
 end
+
+intro
