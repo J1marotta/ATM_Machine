@@ -31,16 +31,19 @@ def intro
   # save their name
   cName =gets.capitalize
   puts
+  `say "Hello #{cName}, now lets set up a PIN"`
   puts "                             Hi #{cName}"
   puts "                     Welcome, now lets set up a pin"
 
   # save their pin number
   @pinMaster = pin_control
+  say("pinaccept")
 
 
   puts @pinMaster
   puts
   puts "                       Keep Your Pin Safe!"
+  `say "Keep your Pin Safe"`
   sleep(1)
   send_help
 # run the choice function
@@ -80,8 +83,8 @@ the Intro code will keep running while runner is equal to 1.
     #  say("quit")
       quit
     when "h"
-      say("help")
       send_help
+      say("help")
     else
       send_help
     end
@@ -89,22 +92,37 @@ the Intro code will keep running while runner is equal to 1.
 end
 
 def change_pin
-  puts "DEGBUG " +  @pinMaster
+=begin
+ change pin method, asks user for old pin and if it matches allows to asign a new pin
+ if it doesn't match they get three chances before the police are called
+=end
+
+  #wait 1 second and clear the screen before starting
+  sleep(1)
   system("clear")
+  #chances is set to 0 as they get 3 per time.
   chances = 0
-  while chances < 3
+
+  # once chances = 3 you're out
+  unless chances = 3
+
+    # display to the screen and sound
     puts "                        Change PIN"
     say("Change pin")
     puts
     puts"                          Old PIN"
+    # get from user what they think old pin
     old_p = gets.chomp
+
+    # if it doesn't match say incorrect and increase chances by 1
     if old_p != @pinMaster
       puts "                     Incorrect Pin"
       say("incorrect")
       chances += 1
+    # it does match, so now re-run our pin control method to change the pin
     else
       puts @pinMaster
-      # new_p = 0
+      say("pinaccept")
       puts "                    Enter your New pin"
       @pinMaster = pin_control
       puts "                      PIN CHANGED"
@@ -162,22 +180,25 @@ def quit
  end
 end
 
+
+
+#pin_control method for changing, the pin,
 def pin_control
+  # if length doesn't equal 4 keep asking
   begin
-    # @pin = pin
     puts "                   Please enter a four digit pin"
     say("four")
     newPin = gets.chomp
   end while newPin.length != 4
+  # return the results given
   return newPin
-  # @pinMaster = pin
 end
 
+
+# Police prints a police car and arrests the user
 def police
-# User has put in wrong pin three times, and now the police must be called
-
-
-# This block, displays a warning on the screen
+  say("police")
+  # displays a warning
   5.times {
     puts "                    WARNING WARNING WARNING"
     puts "              : ! The police are on their way ! :"
@@ -187,8 +208,6 @@ def police
 
   # Pause for dramatic effect.
   sleep (2)
-  say("police")
-  say("police")
 
   # Bring the po po
   File.open("police.txt", "r") do |f|
@@ -225,11 +244,17 @@ def say(x)
   when "incorrect"
     `say "Incorrect PIN"`
 
+  when "pinaccept"
+    `say "PIN Accepted"`
+
   when "changed"
     `say "Pin Successfully Change"`
 
   when "police"
-    `say " YOU ARE UNDER ARREST"`
+    `say " WARNING, WARNING, WARNING"`
+    `say "Three times wrong pin, you must be a criminal"`
+    `say "We know you are trying to hack us,  YOU ARE UNDER ARREST"`
+    `say "The police are on their way "`
 
   when "four"
     `say "Please Enter a four Digit PIN"`
