@@ -12,6 +12,23 @@ James Marotta
 bonus feature Pin code
 =end
 
+# class Account
+#   attr_acessor :name, :balance
+#   def initialize(name, balance=0, pin)
+#     @name = name
+#     @balance = balance
+#     @pinMaster =pin
+#   end
+#
+#   def display_balance(pin_number)
+#     puts pin_number == pin ? "Balance $#{@balance}." : pin_error
+#   end
+#
+#   def withdraw(pin_number)
+#
+
+
+
 def intro
 
   # greet the customer
@@ -38,8 +55,6 @@ def intro
   # save their pin number
   @pinMaster = pin_control
   say("pinaccept")
-
-
   puts @pinMaster
   puts
   puts "                       Keep Your Pin Safe!"
@@ -48,11 +63,6 @@ def intro
   send_help
 # run the choice function
 choice
-end
-
-def balance
-
-
 end
 
 
@@ -66,15 +76,16 @@ the Intro code will keep running while runner is equal to 1.
     choice = gets.chomp.downcase
 
  # run different methods depending on choice.
+    say("help")
     case choice
     when "1"
-      say("2")
+      say("balance")
       balance
     when "2"
-      say("2")
+      say("deposit")
       deposit
     when "3"
-      say("3")
+      say("withdraw")
       withdrawal
     when "4"
       say("change pin")
@@ -104,8 +115,7 @@ def change_pin
   chances = 0
 
   # once chances = 3 you're out
-  unless chances = 3
-
+  unless chances == 3
     # display to the screen and sound
     puts "                        Change PIN"
     say("Change pin")
@@ -121,29 +131,29 @@ def change_pin
       chances += 1
     # it does match, so now re-run our pin control method to change the pin
     else
-      puts @pinMaster
       say("pinaccept")
       puts "                    Enter your New pin"
       @pinMaster = pin_control
+      #print and say changed
       puts "                      PIN CHANGED"
       say("changed")
+
+      # reset chances and go back to main menu and run help.
       chances = 0
-      sleep(1)
       send_help
-    break
     end
-  end
+  else
+    # chances = 3 so the police are called
     sleep(1)
     puts "                    Three strikes, you're Out"
     puts
-
     police
+  end
 end
 
 
 def send_help
   system("clear")
-  say("help")
   puts "                 1    for DISPLAY BALANCE"
   puts "                 2    for DEPOSIT"
   puts "                 3    for WITHDRAWAL"
@@ -154,31 +164,37 @@ def send_help
 end
 
 def quit
+# method for quitting from the main menu.
   system("clear")
- puts
- puts "      You can't quit yet we are buying stuff with your card in India"
- puts "                       hahaha, joking... "
- puts "                             ... "
- puts "                      Really Quit? [y/n]"
- puts
- quit = gets.chomp.downcase
- case quit
- when "y"
-   puts
-   puts "              Thanks for choosing ATM Machine 10000"
-   puts
-   runner = 2
-   exit
- when "n"
-   puts
-   puts "        Great choice, we are just hacking your facebook now"
-   puts
-   send_help
- else
-   puts
-   puts "                      Really quit? [y/n]"
- end
-end
+  say("quit")
+  puts
+  puts "      You can't quit yet we are buying stuff with your card in India"
+  puts "                       hahaha, joking... "
+  puts "                             ... "
+  puts "                      Really Quit? [y/n]"
+  say("Really?")
+  puts
+  quit = gets.chomp.downcase
+  case quit
+  when "y"
+    puts
+    puts "              Thanks for choosing ATM Machine 10000"
+    say("thankyou")
+    puts
+    runner = 2
+    exit
+  when "n"
+    puts
+    puts "        Great choice, we are just hacking your facebook now"
+    say("staying")
+    puts
+    send_help
+  else
+    puts
+    puts "                      Really quit? [y/n]"
+    say("Really?")
+  end
+  end
 
 
 
@@ -190,7 +206,7 @@ def pin_control
     say("four")
     newPin = gets.chomp
   end while newPin.length != 4
-  # return the results given
+  # return the new pin given
   return newPin
 end
 
@@ -229,13 +245,13 @@ def say(x)
   when "intro"
     `say "Welcome to ATM MACHINE 10000."`
 
-  when "1"
+  when "Balance"
     `say "Display Balance"`
 
-  when "2"
+  when "deposit"
     `say "Make a Deposit"`
 
-  when "3"
+  when "Withdraw"
     `say "Make a Withdrawal"`
 
   when "change pin"
@@ -259,13 +275,25 @@ def say(x)
   when "four"
     `say "Please Enter a four Digit PIN"`
 
+  when "quit"
+    `say "You can't quit yet we are buying stuff with your card in India, hahaha, joking.."`
+
+  when "Really?"
+    `say "Really Quit?"`
+
+  when "staying"
+    `say "Great choice, we are just hacking your facebook now"`
+
+  when "thankyou"
+    `say "thank you for choosing ATM Machine 10000"`
+
   when "help"
-  `say "Push 1 for DISPLAY BALANCE"`
-  `say "Push 2 for Desposit"`
-  `say "Push 3 for Withdrawal"`
-  `say "Push 4 to change PIN"`
-  `say "Push H to Repeat the Help"`
-  `say "Push Q to QUIT"`
+    `say "Push 1 for DISPLAY BALANCE"`
+    `say "Push 2 for Deposit"`
+    `say "Push 3 for Withdrawal"`
+    `say "Push 4 to change PIN"`
+    `say "Push H to Repeat the Help"`
+    `say "Push Q to QUIT"`
 
   end
 end
