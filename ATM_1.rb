@@ -52,7 +52,7 @@ bonus feature sounds
 # end
 #
 
-
+# Intro handles a greeting and Gets User Name and Pin number
 def intro
 
   # greet the customer
@@ -73,9 +73,9 @@ def intro
   name = gets.capitalize
   puts
   `say "Hello #{name}, now lets set up a PIN"`
-  puts "                             Hi #{name}"
-  puts "                 Welcome, now lets set up a pin"
-  print "                              "
+  puts "                        Hi #{name}"
+  puts "            Welcome, now lets set up a pin"
+  print "            "
   # save their pin number
   @pinMaster = pin_control
   say("pinaccept")
@@ -136,7 +136,6 @@ end
 =begin
 pin_check is my function to check if user gives the correct pin, I then use the
 yield keyword for when the correct result is given.
-
 =end
 def pin_check
 
@@ -151,6 +150,7 @@ def pin_check
   unless chances == 3
     say("enter pin")
     puts"                          Enter  PIN"
+    print "                         "
     # get from user what they think old pin
     old_p = gets.chomp
 
@@ -192,6 +192,71 @@ def balance
     puts
   }
 
+
+end
+
+def deposit
+  system("clear")
+  say("deposit")
+  puts  "                    Make a Deposit"
+  puts
+  pin_check {
+
+    #greeting and ask how much
+
+    say("pinaccept")
+    say("how much d")
+    print "                       "
+
+    #store the amount and conver to int, then remove from balance
+    deposit = gets.chomp.to_i
+    say("confirm deposit")
+    $balance += deposit
+
+    #say current balance and show on screen
+    say("Rbal")
+    puts
+    puts "                       Your Balance is "
+    puts "                       $ #{$balance} Dollaroos"
+    puts
+  }
+
+end
+
+# check pin and then lower balance by an amount
+def withdrawal
+  system("clear")
+  say("Withdraw")
+  puts  "                    Make a withdrawal"
+  puts
+  pin_check {
+
+    #greeting and ask how much
+
+    say("pinaccept")
+    say("how much w")
+    print "                       "
+
+    #store the amount and conver to int, then remove from balance
+    @withdraw = gets.chomp.to_i
+    say("confirm withdraw")
+    $balance -= @withdraw
+
+    #say current balance and show on screen
+    say("Rbal")
+    puts
+    puts "                       Your Balance is "
+    puts "                       $ #{$balance} Dollaroos"
+    puts
+
+    # make it rain
+    File.open("dolleroos.txt", "r") do |f|
+      f.each_line do |line|
+        puts line
+      end
+    end
+
+    }
 
 end
 
@@ -283,7 +348,8 @@ end
 def pin_control
   # if length doesn't equal 4 keep asking
   begin
-    puts "               Please enter a four digit pin"
+    puts "         Please enter a four digit pin"
+    print "                  "
     say("four")
     newPin = gets.chomp
   end while newPin.length != 4
@@ -335,11 +401,26 @@ def say(x)
   when "bal"
     `say "Your current balance is #{$balance} Dollaroos"`
 
+  when "Rbal"
+    `say "Your remaining balance is #{$balance} Dollaroos"`
+
   when "deposit"
     `say "Make a Deposit"`
 
   when "Withdraw"
     `say "Make a Withdrawal"`
+
+  when "how much w"
+    `say "how much would you like to Withdraw"`
+
+  when "how much d"
+    `say "how much would you like to Deposit"`
+
+  when "confirm withdraw"
+    `say "withdrawing"`
+
+  when "confirm withdraw"
+    `say "Depositing"`
 
   when "change pin"
     `say "Change Pin"`
