@@ -5,28 +5,52 @@ Make a terminal based program; which acts like an ATM
 James Marotta
 
 -Features to include: minimum viable product
- -Greeting
- -Display Balance
+ -Greeting == done
+ -Display Balance == done
  -Withdraw
  -Deposit
 bonus feature Pin code
+bonus feature sounds
 =end
 
+
+# define a new class with features to be used by our user = currently doesn't work unsure why
 # class Account
-#   attr_acessor :name, :balance
-#   def initialize(name, balance=0, pin)
+#   attr_accessor :name, :pin, :balance
+#   def initialize(name, pin, balance=0)
 #     @name = name
 #     @balance = balance
-#     @pinMaster =pin
+#     @pin = pin
 #   end
 #
-#   def display_balance(pin_number)
-#     puts pin_number == pin ? "Balance $#{@balance}." : pin_error
+#   #method to display balance of that user
+#   def display_balance
+#     puts "                    Balance $#{@balance}."
 #   end
 #
+#   #method to withdraw money
 #   def withdraw(pin_number)
+#     if pin_number == pin
+#       @balance -= amount
+#       puts "                Withdrew #{amount}."
+#       puts "           Current Balance #{@balance}   "
+#     else
+#       puts pin_error
+#     end
+#   end
 #
-
+#   #define the pin
+#   def pin
+#     pin = @pinMaster
+#   end
+#
+#   #if incorrect pin used
+#   def pin_error
+#     puts "                     Incorrect Pin"
+#     say("incorrect")
+#   end
+# end
+#
 
 
 def intro
@@ -46,37 +70,46 @@ def intro
   print "                            Name: "
 
   # save their name
-  cName =gets.capitalize
+  name = gets.capitalize
   puts
-  `say "Hello #{cName}, now lets set up a PIN"`
-  puts "                             Hi #{cName}"
-  puts "                     Welcome, now lets set up a pin"
-
+  `say "Hello #{name}, now lets set up a PIN"`
+  puts "                             Hi #{name}"
+  puts "                 Welcome, now lets set up a pin"
+  print "                              "
   # save their pin number
   @pinMaster = pin_control
   say("pinaccept")
-  puts @pinMaster
+
   puts
   puts "                       Keep Your Pin Safe!"
   `say "Keep your Pin Safe"`
   sleep(1)
   send_help
-# run the choice function
-choice
+
+
+  # create a new Account class with the inputed Pin and Name  (currently doesn't work)
+  # user = Account.new("name", @pinMaster, 0)
+
+
+  #new global variable to handle balance
+  $balance = 100
+  # run the choice function and then finish the intro method
+  choice
 end
 
-
+# choice handles options from user and runs separate method for each.
 def choice
-=begin
-While loop to continuously ask the user for a choice.
-the Intro code will keep running while runner is equal to 1.
-=end
+  # While loop to continuously ask the user for a choice.
+  # the Intro code will keep running while runner is equal to 1.
+
+  say("help")
   runner = 1
   while runner == 1
+    print "                       "
     choice = gets.chomp.downcase
 
- # run different methods depending on choice.
-    say("help")
+    # run different methods depending on choice.
+
     case choice
     when "1"
       say("balance")
@@ -91,10 +124,8 @@ the Intro code will keep running while runner is equal to 1.
       say("change pin")
       change_pin
     when "q"
-    #  say("quit")
       quit
     when "h"
-      send_help
       say("help")
     else
       send_help
@@ -102,25 +133,24 @@ the Intro code will keep running while runner is equal to 1.
   end
 end
 
-def change_pin
 =begin
- change pin method, asks user for old pin and if it matches allows to asign a new pin
- if it doesn't match they get three chances before the police are called
+pin_check is my function to check if user gives the correct pin, I then use the
+yield keyword for when the correct result is given.
+
 =end
+def pin_check
 
   #wait 1 second and clear the screen before starting
   sleep(1)
   system("clear")
+
   #chances is set to 0 as they get 3 per time.
   chances = 0
 
   # once chances = 3 you're out
   unless chances == 3
-    # display to the screen and sound
-    puts "                        Change PIN"
-    say("Change pin")
-    puts
-    puts"                          Old PIN"
+    say("enter pin")
+    puts"                          Enter  PIN"
     # get from user what they think old pin
     old_p = gets.chomp
 
@@ -131,12 +161,9 @@ def change_pin
       chances += 1
     # it does match, so now re-run our pin control method to change the pin
     else
-      say("pinaccept")
-      puts "                    Enter your New pin"
-      @pinMaster = pin_control
-      #print and say changed
-      puts "                      PIN CHANGED"
-      say("changed")
+      # depending on when we are pin checking we take on a block of code
+      yield
+
 
       # reset chances and go back to main menu and run help.
       chances = 0
@@ -152,8 +179,60 @@ def change_pin
 end
 
 
+# display balance on screen if you give your pin
+def balance
+  say("balance")
+  pin_check   {
+
+    say("pinaccept")
+    say("bal")
+    puts
+    puts "                       Your Balance is "
+    puts "                       $ #{$balance} Dollaroos"
+    puts
+  }
+
+
+end
+
+
+#change pin yielding a block to our pin_check method
+def change_pin
+
+  puts "                        Change PIN"
+  say("Change pin")
+  puts
+
+  # run pin_check and feed the following block of code
+  pin_check   {
+
+    say("pinaccept")
+    puts "                    Enter your New pin"
+    @pinMaster = pin_control
+
+    #print and say changed
+    puts "                      PIN CHANGED"
+    say("changed")
+  }
+end
+
+
+#send_help controls all main page
 def send_help
   system("clear")
+  puts "
+
+                                ,d   10,0000
+                               88
+                  ,adPPYYba,  MM88MMM  88,dPYba,,adPYba,
+                          Y8   88      88P     88      8a
+                  ,adPPPPP88   88      88      88      88
+                  88,    ,88   88,     88      88      88
+                    8bbdP Y8   Y88     88      88      88
+
+                      By James Marotta
+
+ "
   puts "                 1    for DISPLAY BALANCE"
   puts "                 2    for DEPOSIT"
   puts "                 3    for WITHDRAWAL"
@@ -163,8 +242,10 @@ def send_help
   puts
 end
 
+
+#quit handles leaving the atm machine
 def quit
-# method for quitting from the main menu.
+  # method for quitting from the main menu.
   system("clear")
   say("quit")
   puts
@@ -194,7 +275,7 @@ def quit
     puts "                      Really quit? [y/n]"
     say("Really?")
   end
-  end
+end
 
 
 
@@ -202,7 +283,7 @@ def quit
 def pin_control
   # if length doesn't equal 4 keep asking
   begin
-    puts "                   Please enter a four digit pin"
+    puts "               Please enter a four digit pin"
     say("four")
     newPin = gets.chomp
   end while newPin.length != 4
@@ -238,15 +319,21 @@ end
 
 
 
-## New method to handle sounds
+# method to handle all sounds
 def say(x)
 
   case x
   when "intro"
-    `say "Welcome to ATM MACHINE 10000."`
+    `say "Welcome to ATM MACHINE 10000. We are here to make your life amazing.
+    And definitely not steal your identity,
+    I see you are a new bank customer. Please enter your details. What is your name?
+ "`
 
   when "Balance"
     `say "Display Balance"`
+
+  when "bal"
+    `say "Your current balance is #{$balance} Dollaroos"`
 
   when "deposit"
     `say "Make a Deposit"`
@@ -256,6 +343,9 @@ def say(x)
 
   when "change pin"
     `say "Change Pin"`
+
+  when "enter pin"
+    `say "enter Pin"`
 
   when "incorrect"
     `say "Incorrect PIN"`
