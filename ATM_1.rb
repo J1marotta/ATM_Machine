@@ -14,14 +14,16 @@ bonus feature sounds
 =end
 
 
-# define a new class with features to be used by our user = currently doesn't work unsure why
+#define a new class with features to be used by our user = currently doesn't work unsure why
 # class Account
-#   attr_accessor :name, :pin, :balance
+#
 #   def initialize(name, pin, balance=0)
 #     @name = name
 #     @balance = balance
 #     @pin = pin
 #   end
+#
+#   attr_accessor :name, :pin, :balance
 #
 #   #method to display balance of that user
 #   def display_balance
@@ -87,12 +89,13 @@ def intro
   send_help
 
 
-  # create a new Account class with the inputed Pin and Name  (currently doesn't work)
-  # user = Account.new("name", @pinMaster, 0)
+   #create a new Account class with the inputed Pin and Name  (currently doesn't work)
+   #user = Account.new(name, @pinMaster, 0)
 
 
-  #new global variable to handle balance
+  #new global variable to handle balance and chances because I couldn't get classes to work.
   $balance = 100
+  $chances = 0
   # run the choice function and then finish the intro method
   choice
 end
@@ -144,10 +147,10 @@ def pin_check
   system("clear")
 
   #chances is set to 0 as they get 3 per time.
-  chances = 0
+  #chances = 0
 
   # once chances = 3 you're out
-  unless chances == 3
+  unless $chances == 3
     say("enter pin")
     puts"                          Enter  PIN"
     print "                         "
@@ -158,15 +161,17 @@ def pin_check
     if old_p != @pinMaster
       puts "                     Incorrect Pin"
       say("incorrect")
-      chances += 1
+      $chances += 1
+      puts "debug + #{$chances}"
     # it does match, so now re-run our pin control method to change the pin
     else
       # depending on when we are pin checking we take on a block of code
       yield
+      puts chances
 
 
       # reset chances and go back to main menu and run help.
-      chances = 0
+      $chances = 0
       send_help
     end
   else
@@ -190,6 +195,7 @@ def balance
     puts "                       Your Balance is "
     puts "                       $ #{$balance} Dollaroos"
     puts
+    sleep(1)
   }
 
 
@@ -219,6 +225,7 @@ def deposit
     puts "                       Your Balance is "
     puts "                       $ #{$balance} Dollaroos"
     puts
+    sleep(1)
   }
 
 end
